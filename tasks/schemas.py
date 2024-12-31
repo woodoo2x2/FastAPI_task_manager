@@ -1,7 +1,8 @@
 from pydantic import BaseModel
 
+
 class Task(BaseModel):
-    id : str
+    id: int
     name: str
-    priority : int
-    category_id : int
+    priority: int
+    category_id: int

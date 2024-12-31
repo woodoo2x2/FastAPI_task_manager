@@ -1,10 +1,14 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import text
+
 import sqlite3
 from settings import Settings
 
 Settings = Settings()
 
+engine = create_engine(f"sqlite:///{Settings.DATABASE_NAME}")
 
-def get_db_connection():
-    a = sqlite3.connect(Settings.DATABASE_NAME)
-    print(a)
-    a.close()
+Session = sessionmaker(engine)
+def get_db_session():
+    return Session
