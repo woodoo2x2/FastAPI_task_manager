@@ -21,8 +21,8 @@ async def get_task(task_id: int, db: Session = Depends(get_db_session)):
 @router.post("/")
 async def create_task(task: TaskSchema, db: Session = Depends(get_db_session)):
     tasks_logic = TaskLogic(db)
-    tasks_logic.create_task(task)
-    return {"message": "Task created successfully"}
+    task_id = tasks_logic.create_task(task)
+    return {"message": f"Task with id - {task_id} created successfully"}
 
 @router.delete("/{task_id}")
 async def delete_task(task_id: int, db: Session = Depends(get_db_session)):

@@ -20,11 +20,13 @@ class TaskLogic:
             tasks = session.execute(select(Task)).scalars().all()
         return tasks
 
-    def create_task(self, task: TaskSchema) -> None:
+    def create_task(self, task: TaskSchema) -> int:
         with self.db_session as session:
-            task = Task(id=task.id, name=task.name,pomodoro_count=task.pomodoro_count, category_id=task.category_id)
+            task = Task(name=task.name,pomodoro_count=task.pomodoro_count, category_id=task.category_id)
             session.add(task)
             session.commit()
+            return task.id
+
 
     def delete_task(self, task_id: int) -> None:
         with self.db_session as session:
