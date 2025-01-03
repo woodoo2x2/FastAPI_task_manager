@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base, Mapped
 
 Base = declarative_base()
 
+
 class Task(Base):
     __tablename__ = 'tasks'
 
@@ -10,6 +11,7 @@ class Task(Base):
     name: Mapped[str] = Column(String)
     pomodoro_count: Mapped[int]
     category_id: Mapped[int]
+
 
 class Categories(Base):
     __tablename__ = 'categories'

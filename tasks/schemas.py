@@ -1,8 +1,8 @@
 from pydantic import BaseModel
 
 
-class Task(BaseModel):
+class TaskSchema(BaseModel):
     id: int
     name: str
-    priority: int
+    pomodoro_count: int
     category_id: int
