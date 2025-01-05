@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base, Mapped
+from sqlalchemy.orm import  Mapped
 
-Base = declarative_base()
+from database import Base
 
 
 class Task(Base):
