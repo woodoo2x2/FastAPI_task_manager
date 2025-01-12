@@ -15,3 +15,6 @@ class Settings(BaseSettings):
     REDIS_HOST : str = os.getenv('REDIS_HOST')
     REDIS_PORT : str = os.getenv('REDIS_PORT')
     REDIS_DB : str = os.getenv('REDIS_DB')
+
+    JWT_SECRET_KEY : str = os.getenv('JWT_SECRET_KEY')
+    JWT_DECODE_ALGORITHM : str = os.getenv('JWT_ALGORITHM')
