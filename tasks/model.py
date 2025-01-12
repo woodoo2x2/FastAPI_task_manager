@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import  Mapped
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 
 from database import Base
 
@@ -11,6 +11,7 @@ class Task(Base):
     name: Mapped[str] = Column(String)
     pomodoro_count: Mapped[int]
     category_id: Mapped[int]
+    user_id: Mapped[int] = mapped_column(ForeignKey('userprofile.id'), nullable=False)
 
 
 class Categories(Base):

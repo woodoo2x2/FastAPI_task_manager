@@ -6,4 +6,3 @@ class UserProfile(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
-    access_token = Column(String, nullable=False)
