@@ -6,29 +6,18 @@ from cache.access import get_redis_connection
 from cache.logic import CacheTask
 from database import Session, get_db_session
 from exceptions import TaskNotFoundException
-from tasks.dependency import get_task_logic
+from tasks.dependency import get_task_logic, get_task_service
 from tasks.logic import TaskLogic
 from tasks.schemas import TaskSchema, TaskCreateSchema
+from tasks.service import TaskService
 from user.dependency import get_request_user_id
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
 @router.get("/")
-async def get_all_tasks(task_logic: TaskLogic = Depends(get_task_logic),
-                        redis: Redis = Depends(get_redis_connection)):
-    tasks = task_logic.get_all_tasks()
-
-    if tasks:
-        return tasks
-    else:
-        cache = CacheTask(redis)
-
-        tasks_schema = [TaskSchema.model_validate(task.__dict__) for task in tasks]
-
-        if tasks_schema:
-            cache.set_tasks(tasks_schema)
-        return tasks_schema
+async def get_all_tasks(task_service: TaskService = Depends(get_task_service),):
+    return await task_service.get_tasks()
 
 
 @router.get("/{task_id}")
