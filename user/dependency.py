@@ -3,18 +3,23 @@ from sqlalchemy.orm import Session
 from starlette import status
 
 from auth.service import AuthService
+from client.google import GoogleClient
 from database import get_db_session
 from exceptions import TokenExpiredException, TokenNotCorrectException
+from settings import Settings
 from user.logic import UserLogic
 from user.service import UserService
 
+def get_google_client() -> GoogleClient:
+    return GoogleClient(settings=Settings())
 
 def get_user_logic(db_session: Session = Depends(get_db_session)) -> UserLogic:
     return UserLogic(db_session=db_session)
 
 
-def get_auth_service(user_logic: UserLogic = Depends(get_user_logic)) -> AuthService:
-    return AuthService(user_logic)
+def get_auth_service(user_logic: UserLogic = Depends(get_user_logic),
+                     google_client: GoogleClient = Depends(get_google_client)) -> AuthService:
+    return AuthService(user_logic, google_client)
 
 
 def get_user_service(user_logic: UserLogic = Depends(get_user_logic),
@@ -33,3 +38,4 @@ def get_request_user_id(request: Request,
     except TokenNotCorrectException as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=e.detail)
     return user_id
+

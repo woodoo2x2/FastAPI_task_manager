@@ -4,5 +4,8 @@ from database import Base
 class UserProfile(Base):
     __tablename__ = 'userprofile'
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, nullable=False)
-    password = Column(String, nullable=False)
+    username = Column(String)
+    password = Column(String)
+    email = Column(String)
+    name = Column(String)
+    google_access_token = Column(String)
