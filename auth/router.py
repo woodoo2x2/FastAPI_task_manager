@@ -33,7 +33,7 @@ async def google_login(auth_service: AuthService = Depends(get_auth_service)):
 async def google_auth(code: str,
                       auth_service: AuthService = Depends(get_auth_service),
                       ):
-    return auth_service.google_auth(code)
+    return await auth_service.google_auth(code)
 
 
 @router.get("/login/yandex")
@@ -47,4 +47,4 @@ async def yandex_login(auth_service: AuthService = Depends(get_auth_service)):
 async def yandex_auth(code: str,
                       auth_service: AuthService = Depends(get_auth_service),
                       ):
-    return auth_service.yandex_auth(code)
+    return await auth_service.yandex_auth(code)

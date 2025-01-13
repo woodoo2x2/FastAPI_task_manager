@@ -1,3 +1,4 @@
+import httpx
 from fastapi import Depends, security, Security, Request, HTTPException
 from sqlalchemy.orm import Session
 from starlette import status
@@ -12,12 +13,16 @@ from user.logic import UserLogic
 from user.service import UserService
 
 
-def get_yandex_client() -> YandexClient:
-    return YandexClient(settings=Settings())
+def get_async_client() -> httpx.AsyncClient:
+    return httpx.AsyncClient()
 
 
-def get_google_client() -> GoogleClient:
-    return GoogleClient(settings=Settings())
+def get_yandex_client(async_client: httpx.AsyncClient = Depends(get_async_client)) -> YandexClient:
+    return YandexClient(settings=Settings(), async_client=async_client)
+
+
+def get_google_client(async_client: httpx.AsyncClient = Depends(get_async_client)) -> GoogleClient:
+    return GoogleClient(settings=Settings(), async_client=async_client)
 
 
 def get_user_logic(db_session: Session = Depends(get_db_session)) -> UserLogic:
