@@ -5,6 +5,7 @@ from jose import jwt
 
 from auth.schema import GoogleUserData
 from client.google import GoogleClient
+from client.yandex import YandexClient
 from exceptions import UserNotFoundException, UserNotCorrectPasswordException, TokenExpiredException, \
     TokenNotCorrectException
 from settings import Settings
@@ -19,6 +20,28 @@ settings = Settings()
 class AuthService:
     user_logic: UserLogic
     google_client: GoogleClient
+    yandex_client: YandexClient
+
+    def get_yandex_redirect_url(self) -> str:
+        return settings.yandex_redirect_url
+
+    def yandex_auth(self, code: str) -> UserLoginSchema:
+        user_data = self.yandex_client.get_user_info(code)
+        if user := self.user_logic.get_google_user_by_email(email=user_data.email):
+
+            return UserLoginSchema(user_id=user.id, access_token=self.generate_access_token(user.id))
+        else:
+            create_user_data = UserCreateSchema(
+                yandex_access_token=user_data.access_token,
+                email=user_data.email,
+                name=user_data.name,
+            )
+            created_user = self.user_logic.create_user(create_user_data)
+            
+            return UserLoginSchema(user_id=created_user.id, access_token=self.generate_access_token(created_user.id))
+
+    def get_google_redirect_url(self) -> str:
+        return settings.google_redirect_url
 
     def google_auth(self, code: str):
         user_data: GoogleUserData = self.google_client.get_user_info(code)
@@ -34,9 +57,6 @@ class AuthService:
             created_user = self.user_logic.create_user(create_user_data)
             print(created_user, 'created')
             return UserLoginSchema(user_id=created_user.id, access_token=self.generate_access_token(created_user.id))
-
-    def get_google_redirect_url(self) -> str:
-        return settings.google_redirect_url
 
     def login(self, username: str, password: str) -> UserLoginSchema:
         user = self.user_logic.get_user_by_username(username)

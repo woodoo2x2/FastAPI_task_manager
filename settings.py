@@ -22,8 +22,20 @@ class Settings(BaseSettings):
 
     GOOGLE_CLIENT_ID: str = os.getenv('GOOGLE_CLIENT_ID')
     GOOGLE_REDIRECT_URI: str = os.getenv('GOOGLE_REDIRECT_URI')
-    GOOGLE_SECRET_KEY : str = os.getenv('GOOGLE_SECRET_KEY')
-    GOOGLE_TOKEN_URL : str = os.getenv('GOOGLE_TOKEN_URI')
+    GOOGLE_SECRET_KEY: str = os.getenv('GOOGLE_SECRET_KEY')
+    GOOGLE_TOKEN_URL: str = 'https://accounts.google.com/o/oauth2/token'
+
+    YANDEX_CLIENT_ID: str = os.getenv('YANDEX_CLIENT_ID')
+    YANDEX_REDIRECT_URI: str = os.getenv('YANDEX_REDIRECT_URI')
+    YANDEX_SECRET_KEY: str = os.getenv('YANDEX_SECRET_KEY')
+    YANDEX_TOKEN_URL: str = 'https://oauth.yandex.ru/token'
+
     @property
     def google_redirect_url(self) -> str:
         return f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={self.GOOGLE_CLIENT_ID}&redirect_uri={self.GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
+
+    @property
+    def yandex_redirect_url(self) -> str:
+        return (
+            f"https://oauth.yandex.ru/authorize?response_type=code&client_id={self.YANDEX_CLIENT_ID}&force_confirm=yes"
+        )

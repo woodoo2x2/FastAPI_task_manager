@@ -9,3 +9,4 @@ class UserProfile(Base):
     email = Column(String)
     name = Column(String)
     google_access_token = Column(String)
+    yandex_access_token = Column(String)
