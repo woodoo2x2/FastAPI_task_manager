@@ -16,4 +16,3 @@ class CacheTask:
     async def set_tasks(self, tasks: list[TaskSchema]):
         json_tasks = [task.json() for task in tasks]
         await self.redis.lpush('tasks', *json_tasks)
-

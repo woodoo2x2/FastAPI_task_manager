@@ -9,4 +9,4 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 @router.post("/login", response_model=UserLoginSchema)
 async def login(body: UserCreateSchema, user_service: UserService = Depends(get_user_service)):
-    return user_service.create_user(body.username, body.password)
+    return await user_service.create_user(body.username, body.password)

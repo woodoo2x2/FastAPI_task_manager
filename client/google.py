@@ -10,6 +10,7 @@ from settings import Settings
 class GoogleClient:
     settings: Settings
     async_client: httpx.AsyncClient
+
     async def get_user_info(self, code) -> GoogleUserData:
         access_token = self.get_access_token(code)
         async with self.async_client as client:

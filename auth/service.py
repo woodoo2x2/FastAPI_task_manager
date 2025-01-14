@@ -26,7 +26,7 @@ class AuthService:
 
     async def yandex_auth(self, code: str) -> UserLoginSchema:
         user_data = await self.yandex_client.get_user_info(code)
-        if user := self.user_logic.get_google_user_by_email(email=user_data.email):
+        if user := await self.user_logic.get_user_by_email(email=user_data.email):
 
             return UserLoginSchema(user_id=user.id, access_token=self.generate_access_token(user.id))
         else:
@@ -35,7 +35,7 @@ class AuthService:
                 email=user_data.email,
                 name=user_data.name,
             )
-            created_user = self.user_logic.create_user(create_user_data)
+            created_user = await self.user_logic.create_user(create_user_data)
 
             return UserLoginSchema(user_id=created_user.id, access_token=self.generate_access_token(created_user.id))
 
@@ -44,7 +44,7 @@ class AuthService:
 
     async def google_auth(self, code: str):
         user_data = await self.google_client.get_user_info(code)
-        if user := self.user_logic.get_google_user_by_email(email=user_data.email):
+        if user := await self.user_logic.get_user_by_email(email=user_data.email):
 
             return UserLoginSchema(user_id=user.id, access_token=self.generate_access_token(user.id))
         else:
@@ -53,12 +53,12 @@ class AuthService:
                 email=user_data.email,
                 name=user_data.name,
             )
-            created_user = self.user_logic.create_user(create_user_data)
+            created_user = await self.user_logic.create_user(create_user_data)
 
             return UserLoginSchema(user_id=created_user.id, access_token=self.generate_access_token(created_user.id))
 
-    def login(self, username: str, password: str) -> UserLoginSchema:
-        user = self.user_logic.get_user_by_username(username)
+    async def login(self, username: str, password: str) -> UserLoginSchema:
+        user = await self.user_logic.get_user_by_username(username)
         self._validate_user(user, password)
         access_token = self.generate_access_token(user.id)
         return UserLoginSchema(user_id=user.id, access_token=access_token)

@@ -7,6 +7,7 @@ class GoogleUserData(BaseModel):
     name: str
     access_token: str
 
+
 class YandexUserData(BaseModel):
     id: int
     email: str = Field(..., alias='default_email')

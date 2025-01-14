@@ -14,7 +14,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 async def login(body: UserCreateSchema,
                 auth_service: AuthService = Depends(get_auth_service)):
     try:
-        data = auth_service.login(body.username, body.password)
+        data = await auth_service.login(body.username, body.password)
         return data
     except UserNotFoundException as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.detail)
@@ -39,7 +39,6 @@ async def google_auth(code: str,
 @router.get("/login/yandex")
 async def yandex_login(auth_service: AuthService = Depends(get_auth_service)):
     url = auth_service.get_yandex_redirect_url()
-    print(url)
     return RedirectResponse(url)
 
 

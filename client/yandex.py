@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 import httpx
-import requests
 
 from auth.schema import YandexUserData
 from settings import Settings
