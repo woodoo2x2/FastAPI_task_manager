@@ -1,16 +1,34 @@
 import httpx
-from fastapi import Depends, security, Security, Request, HTTPException
+from fastapi import Depends
+from fastapi import security, Security, Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from app.auth.service import AuthService
-from app.client.google import GoogleClient
-from app.client.yandex import YandexClient
+from app.cache.access import get_redis_connection
+from app.cache.logic import CacheTask
 from app.database.database import get_db_session
 from app.exceptions import TokenExpiredException, TokenNotCorrectException
 from app.settings import Settings
-from app.user.logic import UserLogic
-from app.user.service import UserService
+from app.tasks.logic import TaskLogic
+from app.tasks.service import TaskService
+from app.users.auth.client.google import GoogleClient
+from app.users.auth.client.yandex import YandexClient
+from app.users.auth.service import AuthService
+from app.users.logic import UserLogic
+from app.users.service import UserService
+
+
+async def get_task_logic(db: AsyncSession = Depends(get_db_session)):
+    return TaskLogic(db)
+
+
+async def get_cache_logic(redis_conn=Depends(get_redis_connection)):
+    return CacheTask(redis_conn)
+
+
+async def get_task_service(cache_task: CacheTask = Depends(get_cache_logic),
+                           task_logic: TaskLogic = Depends(get_task_logic)):
+    return TaskService(cache_task, task_logic)
 
 
 async def get_async_client() -> httpx.AsyncClient:
