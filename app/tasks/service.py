@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from cache.logic import CacheTask
-from tasks.logic import TaskLogic
-from tasks.schemas import TaskSchema
+from app.cache.logic import CacheTask
+from app.tasks.logic import TaskLogic
+from app.tasks.schemas import TaskSchema
 
 
 @dataclass

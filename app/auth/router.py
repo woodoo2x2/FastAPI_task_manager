@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from starlette import status
 
-from auth.service import AuthService
-from exceptions import UserNotFoundException, UserNotCorrectPasswordException
-from user.dependency import get_auth_service
-from user.schemas import UserLoginSchema, UserCreateSchema
+from app.auth.service import AuthService
+from app.exceptions import UserNotFoundException, UserNotCorrectPasswordException
+from app.user.dependency import get_auth_service
+from app.user.schemas import UserLoginSchema, UserCreateSchema
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 

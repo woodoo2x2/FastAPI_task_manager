@@ -1,11 +1,11 @@
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from cache.access import get_redis_connection
-from cache.logic import CacheTask
-from database import get_db_session
-from tasks.logic import TaskLogic
-from tasks.service import TaskService
+from app.cache.access import get_redis_connection
+from app.cache.logic import CacheTask
+from app.database.database import get_db_session
+from app.tasks.logic import TaskLogic
+from app.tasks.service import TaskService
 
 
 async def get_task_logic(db: AsyncSession = Depends(get_db_session)):

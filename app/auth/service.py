@@ -3,14 +3,14 @@ from datetime import datetime, timedelta
 
 from jose import jwt
 
-from client.google import GoogleClient
-from client.yandex import YandexClient
-from exceptions import UserNotFoundException, UserNotCorrectPasswordException, TokenExpiredException, \
+from app.client.google import GoogleClient
+from app.client.yandex import YandexClient
+from app.exceptions import UserNotFoundException, UserNotCorrectPasswordException, TokenExpiredException, \
     TokenNotCorrectException
-from settings import Settings
-from user.logic import UserLogic
-from user.models import UserProfile
-from user.schemas import UserLoginSchema, UserCreateSchema
+from app.settings import Settings
+from app.user.logic import UserLogic
+from app.user.models import UserProfile
+from app.user.schemas import UserLoginSchema, UserCreateSchema
 
 settings = Settings()
 

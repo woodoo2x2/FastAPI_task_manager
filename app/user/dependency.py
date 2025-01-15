@@ -3,14 +3,14 @@ from fastapi import Depends, security, Security, Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from auth.service import AuthService
-from client.google import GoogleClient
-from client.yandex import YandexClient
-from database import get_db_session
-from exceptions import TokenExpiredException, TokenNotCorrectException
-from settings import Settings
-from user.logic import UserLogic
-from user.service import UserService
+from app.auth.service import AuthService
+from app.client.google import GoogleClient
+from app.client.yandex import YandexClient
+from app.database.database import get_db_session
+from app.exceptions import TokenExpiredException, TokenNotCorrectException
+from app.settings import Settings
+from app.user.logic import UserLogic
+from app.user.service import UserService
 
 
 async def get_async_client() -> httpx.AsyncClient:

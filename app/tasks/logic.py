@@ -1,11 +1,10 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import Session
 from typing_extensions import Sequence
 
-from exceptions import TaskNotFoundException
+from app.exceptions import TaskNotFoundException
 from .model import Task
-from .schemas import TaskCreateSchema, TaskSchema
+from .schemas import TaskCreateSchema
 
 
 class TaskLogic:

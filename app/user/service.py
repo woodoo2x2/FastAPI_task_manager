@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from auth.service import AuthService
-from user.logic import UserLogic
-from user.schemas import UserLoginSchema
+from app.auth.service import AuthService
+from app.user.logic import UserLogic
+from app.user.schemas import UserLoginSchema
 
 
 @dataclass

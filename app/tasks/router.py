@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
-from exceptions import TaskNotFoundException
-from tasks.dependency import get_task_logic, get_task_service
-from tasks.logic import TaskLogic
-from tasks.schemas import TaskCreateSchema
-from tasks.service import TaskService
-from user.dependency import get_request_user_id
+from app.exceptions import TaskNotFoundException
+from app.tasks.dependency import get_task_logic, get_task_service
+from app.tasks.logic import TaskLogic
+from app.tasks.schemas import TaskCreateSchema
+from app.tasks.service import TaskService
+from app.user.dependency import get_request_user_id
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
