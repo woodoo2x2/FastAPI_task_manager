@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import httpx
 
-from app.auth.schema import GoogleUserData
+from app.users.auth.schema import GoogleUserData
 from app.settings import Settings
 
 
