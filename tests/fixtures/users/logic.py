@@ -14,6 +14,8 @@ class FakeUserLogic:
     async def create_user(self, user: UserCreateSchema) -> None:
         return UserProfileFactory()
 
+
 @pytest.fixture
-def user_logic():
+def fake_user_logic():
     return FakeUserLogic()
+

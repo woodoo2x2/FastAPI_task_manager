@@ -30,6 +30,17 @@ class Settings(BaseSettings):
     YANDEX_SECRET_KEY: str = os.getenv('YANDEX_SECRET_KEY')
     YANDEX_TOKEN_URL: str = 'https://oauth.yandex.ru/token'
 
+    CELERY_REDIS_URL: str = os.getenv('CELERY_REDIS_URL')
+
+    MAIL_SERVER: str = os.getenv('MAIL_SERVER')
+    MAIL_PORT: int = os.getenv('MAIL_PORT')
+    MAIL_STARTTLS: bool = False
+    MAIL_SSL_TLS: bool = True
+    MAIL_USE_CREDENTIALS: bool = True
+    MAIL_USERNAME: str = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD: str = os.getenv('MAIL_PASSWORD')
+    MAIL_FROM: str = os.getenv('MAIL_USERNAME')
+
     @property
     def google_redirect_url(self) -> str:
         return f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={self.GOOGLE_CLIENT_ID}&redirect_uri={self.GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
