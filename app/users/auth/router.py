@@ -33,7 +33,11 @@ async def google_login(auth_service: AuthService = Depends(get_auth_service)):
 async def google_auth(code: str,
                       auth_service: AuthService = Depends(get_auth_service),
                       ):
-    return await auth_service.google_auth(code)
+    try:
+        user_data = await auth_service.google_auth(code)
+        return {"status": "success", "user_data": user_data}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
 
 
 @router.get("/login/yandex")

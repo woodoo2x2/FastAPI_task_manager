@@ -1,6 +1,9 @@
+from typing import Type
+
 import httpx
 from fastapi import Depends
 from fastapi import security, Security, Request, HTTPException
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -12,6 +15,7 @@ from app.settings import Settings
 from app.tasks.logic import TaskLogic
 from app.tasks.service import TaskService
 from app.users.auth.client.google import GoogleClient
+from app.users.auth.client.mail import MailClient
 from app.users.auth.client.yandex import YandexClient
 from app.users.auth.service import AuthService
 from app.users.logic import UserLogic
@@ -31,12 +35,16 @@ async def get_task_service(cache_task: CacheTask = Depends(get_cache_logic),
     return TaskService(cache_task, task_logic)
 
 
-async def get_async_client() -> httpx.AsyncClient:
+async def get_async_client():
     return httpx.AsyncClient()
 
 
 async def get_yandex_client(async_client: httpx.AsyncClient = Depends(get_async_client)) -> YandexClient:
     return YandexClient(settings=Settings(), async_client=async_client)
+
+
+async def get_mail_client():
+    return MailClient(settings=Settings())
 
 
 async def get_google_client(async_client: httpx.AsyncClient = Depends(get_async_client)) -> GoogleClient:
@@ -49,13 +57,15 @@ async def get_user_logic(db_session: AsyncSession = Depends(get_db_session)) -> 
 
 async def get_auth_service(user_logic: UserLogic = Depends(get_user_logic),
                            google_client: GoogleClient = Depends(get_google_client),
-                           yandex_client: YandexClient = Depends(get_yandex_client)) -> AuthService:
-    return AuthService(user_logic, google_client, yandex_client)
+                           yandex_client: YandexClient = Depends(get_yandex_client),
+                           mail_client: MailClient = Depends(get_mail_client)) -> AuthService:
+    return AuthService(user_logic, google_client, yandex_client, mail_client)
 
 
 async def get_user_service(user_logic: UserLogic = Depends(get_user_logic),
-                           auth_service: AuthService = Depends(get_auth_service)) -> UserService:
-    return UserService(user_logic=user_logic, auth_service=auth_service)
+                           auth_service: AuthService = Depends(get_auth_service),
+                           mail_client: MailClient = Depends(get_mail_client)) -> UserService:
+    return UserService(user_logic=user_logic, auth_service=auth_service, mail_client=mail_client)
 
 
 reusable_oauth2 = security.HTTPBearer()

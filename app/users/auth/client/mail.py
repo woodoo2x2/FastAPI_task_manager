@@ -1,9 +1,8 @@
-import smtplib
-import ssl
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 from app.settings import Settings
+from worker.celery import send_email_task
 
 
 class MailClient:
@@ -14,21 +13,7 @@ class MailClient:
         self.smtp_password = settings.MAIL_PASSWORD
 
     def send_mail(self, to: str) -> None:
-        msg = self.__build_message("Welcome mail", "Welcome to the mail system", to)
-        self.__send_mail(msg)
+        subject = "Welcome mail"
+        body = "Welcome to the mail system"
+        send_email_task.delay(self.from_email, to, subject, body)
 
-    def __build_message(self, subject: str, body: str, to: str) -> MIMEMultipart:
-        msg = MIMEMultipart()
-
-        msg['From'] = self.from_email
-        msg['To'] = to
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
-        return msg
-
-    def __send_mail(self, msg: MIMEMultipart) -> None:
-        context = ssl.create_default_context()
-        servet = smtplib.SMTP_SSL(self.smtp_server, self.smtp_port,context=context)
-        servet.login(self.from_email, self.smtp_password)
-        servet.send_message(msg)
-        servet.close()

@@ -12,17 +12,19 @@ class GoogleClient:
     async_client: httpx.AsyncClient
 
     async def get_user_info(self, code) -> GoogleUserData:
-        access_token = self.get_access_token(code)
-        async with self.async_client as client:
-            user_info = await client.get(
-                "https://www.googleapis.com/oauth2/v3/userinfo",
-                headers={"Authorization": f"Bearer {access_token}"}
-            )
-            user_info = user_info.json()
-            return GoogleUserData(id=user_info['sub'],
-                                  email=user_info['email'],
-                                  name=user_info['name'],
-                                  access_token=access_token)
+        access_token = await self.get_access_token(code)
+
+
+        user_info = await self.async_client.get(
+            "https://www.googleapis.com/oauth2/v3/userinfo",
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        user_info = user_info.json()
+
+        return GoogleUserData(id = user_info['sub'],
+                              email=user_info['email'],
+                              name=user_info['name'],
+                              access_token=access_token)
 
     async def get_access_token(self, code) -> str:
         data = {
@@ -32,6 +34,15 @@ class GoogleClient:
             "redirect_uri": self.settings.GOOGLE_REDIRECT_URI,
             "grant_type": "authorization_code",
         }
-        with self.async_client as client:
-            response = await client.post(self.settings.GOOGLE_TOKEN_URL, data=data)
-        return response.json()['access_token']
+
+        response = await self.async_client.post(
+            self.settings.GOOGLE_TOKEN_URL,
+            data=data,
+            headers={"Content-Type": "application/x-www-form-urlencoded"}
+        )
+
+        if response.status_code != 200:
+            error_message = response.json().get("error_description", response.text)
+            raise Exception(f"Failed to get access token: {error_message}")
+
+        return response.json().get('access_token')
