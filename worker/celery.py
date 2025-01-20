@@ -9,8 +9,8 @@ from app.settings import Settings
 celery = Celery(__name__)
 settings = Settings()
 
-celery.conf.broker_url = settings.CELERY_REDIS_URL
-celery.conf.result_backend = settings.CELERY_REDIS_URL
+celery.conf.broker_url = settings.CELERY_BROKER_URL
+celery.conf.result_backend = 'rpc://'
 celery.conf.update(
     broker_connection_retry_on_startup=True  # Исправляет предупреждение
 )

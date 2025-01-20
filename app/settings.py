@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     YANDEX_SECRET_KEY: str = os.getenv('YANDEX_SECRET_KEY')
     YANDEX_TOKEN_URL: str = 'https://oauth.yandex.ru/token'
 
-    CELERY_REDIS_URL: str = os.getenv('CELERY_REDIS_URL')
+    CELERY_BROKER_URL: str = os.getenv('CELERY_BROKER_URL')
 
     MAIL_SERVER: str = os.getenv('MAIL_SERVER')
     MAIL_PORT: int = os.getenv('MAIL_PORT')
