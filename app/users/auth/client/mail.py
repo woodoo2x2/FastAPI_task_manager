@@ -1,19 +1,32 @@
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+import json
+import uuid
+from dataclasses import dataclass
+
+import aio_pika
 
 from app.settings import Settings
-from worker.celery import send_email_task
 
 
+@dataclass
 class MailClient:
-    def __init__(self, settings: Settings):
-        self.from_email = settings.MAIL_FROM
-        self.smtp_server = settings.MAIL_SERVER
-        self.smtp_port = settings.MAIL_PORT
-        self.smtp_password = settings.MAIL_PASSWORD
+    settings: Settings
 
-    def send_mail(self, to: str) -> None:
-        subject = "Welcome mail"
-        body = "Welcome to the mail system"
-        send_email_task.delay(self.from_email, to, subject, body)
+    async def send_welcome_email(self, to: str) -> None:
+        connection = await aio_pika.connect_robust(self.settings.CELERY_BROKER_URL)
+        email_body = {
+            "message":"Welcome to taskmanager",
+            "user_email": to,
+            "subject": "Welcome message",
+        }
+
+        async with connection:
+            channel = await connection.channel()
+            message = aio_pika.Message(
+                body = json.dumps(email_body).encode("utf-8"),
+                correlation_id=str(uuid.uuid4())
+            )
+            await channel.default_exchange.publish(
+                message=message,
+                routing_key="email_queue"
+            )
 

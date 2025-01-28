@@ -1,9 +1,6 @@
-from typing import Type
-
 import httpx
 from fastapi import Depends
 from fastapi import security, Security, Request, HTTPException
-from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -20,6 +17,10 @@ from app.users.auth.client.yandex import YandexClient
 from app.users.auth.service import AuthService
 from app.users.logic import UserLogic
 from app.users.service import UserService
+
+
+async def get_mail_client() -> MailClient:
+    return MailClient(settings=Settings())
 
 
 async def get_task_logic(db: AsyncSession = Depends(get_db_session)):
@@ -41,10 +42,6 @@ async def get_async_client():
 
 async def get_yandex_client(async_client: httpx.AsyncClient = Depends(get_async_client)) -> YandexClient:
     return YandexClient(settings=Settings(), async_client=async_client)
-
-
-async def get_mail_client():
-    return MailClient(settings=Settings())
 
 
 async def get_google_client(async_client: httpx.AsyncClient = Depends(get_async_client)) -> GoogleClient:
