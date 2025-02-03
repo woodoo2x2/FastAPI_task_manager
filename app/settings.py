@@ -41,6 +41,9 @@ class Settings(BaseSettings):
     MAIL_PASSWORD: str = os.getenv('MAIL_PASSWORD')
     MAIL_FROM: str = os.getenv('MAIL_USERNAME')
 
+    BROKER_URL: str = "localhost:9092"
+    EMAIL_TOPIC : str = 'email_topic'
+
     @property
     def google_redirect_url(self) -> str:
         return f"https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={self.GOOGLE_CLIENT_ID}&redirect_uri={self.GOOGLE_REDIRECT_URI}&scope=openid%20profile%20email&access_type=offline"
