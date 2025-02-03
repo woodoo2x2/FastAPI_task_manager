@@ -1,12 +1,14 @@
 import asyncio
+import json
 
 import httpx
-from aiokafka import AIOKafkaProducer
+from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
 from fastapi import Depends
 from fastapi import security, Security, Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from app.broker.consumer import BrokerConsumer
 from app.broker.producer import BrokerProducer
 from app.cache.access import get_redis_connection
 from app.cache.logic import CacheTask
@@ -30,13 +32,26 @@ async def get_broker_producer() -> BrokerProducer:
     return BrokerProducer(
         producer=AIOKafkaProducer(
             bootstrap_servers=settings.BROKER_URL,
-            loop=event_loop,
+            loop=event_loop
         ),
-        email_topic=settings.EMAIL_TOPIC,
+        email_topic=settings.EMAIL_TOPIC
     )
 
 
-async def get_mail_client(broker_producer: BrokerProducer = Depends(get_broker_producer)) -> MailClient:
+async def get_broker_consumer() -> BrokerConsumer:
+    settings = Settings()
+    return BrokerConsumer(
+        consumer=AIOKafkaConsumer(
+            settings.EMAIL_CALLBACK_TOPIC,
+            bootstrap_servers='localhost:9092',
+            value_deserializer=lambda message: json.loads(message.decode('utf-8'))
+        ),
+    )
+
+
+async def get_mail_client(
+        broker_producer: BrokerProducer = Depends(get_broker_producer),
+) -> MailClient:
     return MailClient(settings=Settings(), broker_producer=broker_producer)
 
 

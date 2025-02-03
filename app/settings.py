@@ -43,6 +43,7 @@ class Settings(BaseSettings):
 
     BROKER_URL: str = "localhost:9092"
     EMAIL_TOPIC : str = 'email_topic'
+    EMAIL_CALLBACK_TOPIC: str = 'callback_email_topic'
 
     @property
     def google_redirect_url(self) -> str:
