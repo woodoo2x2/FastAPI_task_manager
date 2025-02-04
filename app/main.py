@@ -7,7 +7,7 @@ from app.tasks.router import router as tasks_router
 from app.users.auth.router import router as auth_router
 from app.users.router import router as user_router
 
-
+#Kafka
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # broker_consumer = await get_broker_consumer()
