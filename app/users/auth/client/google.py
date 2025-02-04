@@ -14,17 +14,18 @@ class GoogleClient:
     async def get_user_info(self, code) -> GoogleUserData:
         access_token = await self.get_access_token(code)
 
-
         user_info = await self.async_client.get(
             "https://www.googleapis.com/oauth2/v3/userinfo",
-            headers={"Authorization": f"Bearer {access_token}"}
+            headers={"Authorization": f"Bearer {access_token}"},
         )
         user_info = user_info.json()
 
-        return GoogleUserData(id = user_info['sub'],
-                              email=user_info['email'],
-                              name=user_info['name'],
-                              access_token=access_token)
+        return GoogleUserData(
+            id=user_info["sub"],
+            email=user_info["email"],
+            name=user_info["name"],
+            access_token=access_token,
+        )
 
     async def get_access_token(self, code) -> str:
         data = {
@@ -38,11 +39,11 @@ class GoogleClient:
         response = await self.async_client.post(
             self.settings.GOOGLE_TOKEN_URL,
             data=data,
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
         )
 
         if response.status_code != 200:
             error_message = response.json().get("error_description", response.text)
             raise Exception(f"Failed to get access token: {error_message}")
 
-        return response.json().get('access_token')
+        return response.json().get("access_token")

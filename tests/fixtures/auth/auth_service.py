@@ -9,7 +9,7 @@ def auth_service_mock(yandex_client, google_client, fake_user_logic):
     return AuthService(
         user_logic=fake_user_logic,
         google_client=google_client,
-        yandex_client=yandex_client
+        yandex_client=yandex_client,
     )
 
 
@@ -18,5 +18,5 @@ def auth_service(yandex_client, google_client, db_session):
     return AuthService(
         user_logic=UserLogic(db_session=db_session),
         yandex_client=yandex_client,
-        google_client=google_client
+        google_client=google_client,
     )

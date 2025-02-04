@@ -18,4 +18,3 @@ class FakeUserLogic:
 @pytest.fixture
 def fake_user_logic():
     return FakeUserLogic()
-

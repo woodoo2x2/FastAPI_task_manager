@@ -10,9 +10,9 @@ class CacheTask:
         self.redis = redis
 
     async def get_tasks(self):
-        task_json = await self.redis.lrange('tasks', 0, -1)
+        task_json = await self.redis.lrange("tasks", 0, -1)
         return [TaskSchema.model_validate(json.loads(task)) for task in task_json]
 
     async def set_tasks(self, tasks: list[TaskSchema]):
         json_tasks = [task.json() for task in tasks]
-        await self.redis.lpush('tasks', *json_tasks)
+        await self.redis.lpush("tasks", *json_tasks)

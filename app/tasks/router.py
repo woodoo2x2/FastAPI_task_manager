@@ -11,7 +11,9 @@ router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
 @router.get("/")
-async def get_all_tasks(task_service: TaskService = Depends(get_task_service), ):
+async def get_all_tasks(
+    task_service: TaskService = Depends(get_task_service),
+):
     return await task_service.get_tasks()
 
 
@@ -21,19 +23,23 @@ async def get_task(task_id: int, task_logic: TaskLogic = Depends(get_task_logic)
 
 
 @router.post("/")
-async def create_task(body: TaskCreateSchema,
-                      user_id: int = Depends(get_request_user_id),
-                      task_logic: TaskLogic = Depends(get_task_logic)):
+async def create_task(
+    body: TaskCreateSchema,
+    user_id: int = Depends(get_request_user_id),
+    task_logic: TaskLogic = Depends(get_task_logic),
+):
     task_id = await task_logic.create_task(body, user_id)
     task = await task_logic.get_task(task_id)
     return {"message": f"Task with id - {task} created successfully"}
 
 
 @router.put("/{task_id}")
-async def update_task(task_id: int,
-                      name: str,
-                      task_logic: TaskLogic = Depends(get_task_logic),
-                      user_id: int = Depends(get_request_user_id)):
+async def update_task(
+    task_id: int,
+    name: str,
+    task_logic: TaskLogic = Depends(get_task_logic),
+    user_id: int = Depends(get_request_user_id),
+):
     try:
         await task_logic.update_task(task_id, name, user_id)
         return {"message": f"Task with id - {task_id} updated successfully"}
@@ -42,9 +48,11 @@ async def update_task(task_id: int,
 
 
 @router.delete("/{task_id}")
-async def delete_task(task_id: int,
-                      task_logic: TaskLogic = Depends(get_task_logic),
-                      user_id: int = Depends(get_request_user_id)):
+async def delete_task(
+    task_id: int,
+    task_logic: TaskLogic = Depends(get_task_logic),
+    user_id: int = Depends(get_request_user_id),
+):
     try:
         await task_logic.delete_task(task_id=task_id, user_id=user_id)
     except TaskNotFoundException as e:

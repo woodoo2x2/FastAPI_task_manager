@@ -19,7 +19,9 @@ class TaskLogic:
 
     async def get_task(self, task_id: int):
         async with self.db_session as session:
-            task = (await session.execute(select(Task).where(Task.id == task_id))).scalar_one_or_none()
+            task = (
+                await session.execute(select(Task).where(Task.id == task_id))
+            ).scalar_one_or_none()
         return task
 
     async def get_all_tasks(self):
@@ -29,10 +31,12 @@ class TaskLogic:
 
     async def create_task(self, task: TaskCreateSchema, user_id: int) -> int:
         async with self.db_session as session:
-            task = Task(name=task.name,
-                        pomodoro_count=task.pomodoro_count,
-                        category_id=task.category_id,
-                        user_id=user_id)
+            task = Task(
+                name=task.name,
+                pomodoro_count=task.pomodoro_count,
+                category_id=task.category_id,
+                user_id=user_id,
+            )
             session.add(task)
             await session.commit()
             return task.id

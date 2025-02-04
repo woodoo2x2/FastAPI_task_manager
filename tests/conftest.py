@@ -3,5 +3,5 @@ pytest_plugins = [
     "tests.fixtures.auth.clients",
     "tests.fixtures.users.logic",
     "tests.fixtures.settings",
-    "tests.fixtures.users.models"
+    "tests.fixtures.users.models",
 ]

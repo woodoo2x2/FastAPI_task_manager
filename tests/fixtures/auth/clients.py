@@ -52,7 +52,6 @@ def google_user_info() -> GoogleUserData:
         email=faker.email(),
         name=faker.name(),
         access_token=faker.sha256(),
-
     )
 
 

@@ -8,5 +8,7 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("/login", response_model=UserLoginSchema)
-async def login(body: UserCreateSchema, user_service: UserService = Depends(get_user_service)):
+async def login(
+    body: UserCreateSchema, user_service: UserService = Depends(get_user_service)
+):
     return await user_service.create_user(body)

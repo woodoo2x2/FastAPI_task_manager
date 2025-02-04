@@ -7,7 +7,7 @@ from app.users.models import UserProfile
 faker = FakerFactory.create()
 
 
-@register(_name='user_profile')
+@register(_name="user_profile")
 class UserProfileFactory(factory.Factory):
     class Meta:
         model = UserProfile

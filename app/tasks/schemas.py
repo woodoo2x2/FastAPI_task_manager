@@ -11,6 +11,7 @@ class TaskSchema(BaseModel):
     class Config:
         from_attributes = True
 
+
 class TaskCreateSchema(BaseModel):
     name: str
     pomodoro_count: int

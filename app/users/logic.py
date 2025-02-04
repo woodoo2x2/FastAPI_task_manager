@@ -18,7 +18,9 @@ class UserLogic:
 
     async def create_user(self, user: UserCreateSchema) -> UserProfile:
 
-        query = insert(UserProfile).values(**user.model_dump()).returning(UserProfile.id)
+        query = (
+            insert(UserProfile).values(**user.model_dump()).returning(UserProfile.id)
+        )
 
         async with self.db_session as session:
             user_id: int = (await session.execute(query)).scalar()

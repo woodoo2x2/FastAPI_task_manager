@@ -10,6 +10,6 @@ class GoogleUserData(BaseModel):
 
 class YandexUserData(BaseModel):
     id: int
-    email: str = Field(..., alias='default_email')
-    name: str = Field(..., alias='real_name')
-    access_token: str = Field(..., alias='psuid')
+    email: str = Field(..., alias="default_email")
+    name: str = Field(..., alias="real_name")
+    access_token: str = Field(..., alias="psuid")

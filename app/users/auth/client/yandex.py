@@ -16,7 +16,7 @@ class YandexClient:
         async with self.async_client as client:
             user_info = await client.get(
                 "https://login.yandex.ru/info?format=json",
-                headers={"Authorization": f"OAuth {access_token}"}
+                headers={"Authorization": f"OAuth {access_token}"},
             )
         return YandexUserData(**user_info.json(), access_token=access_token)
 
@@ -34,4 +34,4 @@ class YandexClient:
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
             )
-        return response.json()['access_token']
+        return response.json()["access_token"]
