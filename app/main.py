@@ -10,8 +10,8 @@ from app.users.router import router as user_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    broker_consumer = await get_broker_consumer()
-    await broker_consumer.consume_callback_message()
+    #broker_consumer = await get_broker_consumer()
+    #await broker_consumer.consume_callback_message()
     yield
 
 
